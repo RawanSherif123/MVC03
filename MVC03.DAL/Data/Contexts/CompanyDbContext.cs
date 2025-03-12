@@ -12,9 +12,9 @@ namespace MVC03.DAL.Data.Contexts
     public class CompanyDbContext : DbContext
     {
 
-        public CompanyDbContext(DbContextOptions<CompanyDbContext> options) : base(options) 
+        public CompanyDbContext(DbContextOptions<CompanyDbContext> options) : base(options)
         {
-            
+
 
         }
 
@@ -30,7 +30,7 @@ namespace MVC03.DAL.Data.Contexts
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet <Department> Departments { get; set; }
-
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
