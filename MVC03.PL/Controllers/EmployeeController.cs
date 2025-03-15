@@ -59,40 +59,38 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Details(int? id, string viewname = "Details")
         {
-            if (id is null) return BadRequest();
+            if (id is null) return BadRequest("Invalid Id");
             var employee = _employeeRepo.Get(id.Value);
 
-            if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
-
-
+            if (employee == null) return NotFound(new { statusCode = 404, messege = $"Employee With Id:{id} is Not Found" });
             return View(viewname, employee);
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            return Details(id, "Edit");
+
+            if (id is null) return BadRequest("Invalid Id");
+            var employee = _employeeRepo.Get(id.Value);
+            if (employee == null) return NotFound(new { statusCode = 404, messege = $"Employee With Id:{id} is Not Found" });
+            var employeeDto = new EmployeeDto()
+            {
+                
+                Name = employee.Name,
+                Salary = employee.Salary,
+                Address = employee.Address,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                Age = employee.Age,
+
+                HiringDate = employee.HiringDate,
+                Phone = employee.Phone,
+                CreateAt = employee.CreateAt,
+                Email = employee.Email,
+
+            };
+            return View(employeeDto);
         }
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, Employee model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (id == model.Id)
-        //        {
-        //            var count = _employeeRepo.Update(model);
-        //            if (count > 0)
-        //            {
-        //                return RedirectToAction(nameof(Index));
-        //            }
-
-        //        }
-        //    }
-        //    return View(model);
-        //}
 
 
         [HttpPost]
@@ -101,31 +99,67 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = _employeeRepo.Get(id);
-
-                if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
-
-
-                employee.Email = model.Email;
-                employee.Phone = model.Phone;
-                employee.Address = model.Address;
-                employee.Age = model.Age;
-                employee.HiringDate = model.HiringDate;
-                employee.Name = model.Name;
-                employee.IsActive = model.IsActive;
-                employee.IsDeleted = model.IsDeleted;
-                employee.CreateAt = model.CreateAt;
-                employee.Salary = model.Salary;
-
-                var count = _employeeRepo.Update(employee);
-                if (count > 0)
+                // if (id != model.Id) return BadRequest();
+                var employee = new Employee()
                 {
-                    return RedirectToAction(nameof(Index));
-                }
+                    Id = id,
+                    Name = model.Name,
+                    Salary = model.Salary,
+                    Address = model.Address,
+                    IsActive = model.IsActive,
+                    IsDeleted = model.IsDeleted,
+                    Age = model.Age,
 
+                    HiringDate = model.HiringDate,
+                    Phone = model.Phone,
+                    CreateAt = model.CreateAt,
+                    Email = model.Email,
+
+                };
+                {
+                    var count = _employeeRepo.Update(employee);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                }
             }
             return View(model);
         }
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit([FromRoute] int id, EmployeeDto model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var employee = _employeeRepo.Get(id);
+
+        //        if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
+
+
+        //        employee.Email = model.Email;
+        //        employee.Phone = model.Phone;
+        //        employee.Address = model.Address;
+        //        employee.Age = model.Age;
+        //        employee.HiringDate = model.HiringDate;
+        //        employee.Name = model.Name;
+        //        employee.IsActive = model.IsActive;
+        //        employee.IsDeleted = model.IsDeleted;
+        //        employee.CreateAt = model.CreateAt;
+        //        employee.Salary = model.Salary;
+
+        //        var count = _employeeRepo.Update(employee);
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //    }
+        //    return View(model);
+        //}
 
 
         [HttpGet]
