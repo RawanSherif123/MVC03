@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,5 +22,9 @@ namespace MVC03.DAL.Models
 
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+
+        [DisplayName("Department")]
+        public int ?DepartmentId { get; set; }
+        public Department? Department { get; set; }
     }
 }

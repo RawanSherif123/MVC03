@@ -1,4 +1,5 @@
-﻿using MVC03.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC03.BLL.Interfaces;
 using MVC03.DAL.Data.Contexts;
 using MVC03.DAL.Models;
 using System;
@@ -20,11 +21,19 @@ namespace MVC03.BLL.Repositories
 
         public IEnumerable<T> GetAll()
         {
+            if(typeof(T) == (typeof(Employee)))
+            {
+                return (IEnumerable<T>) _context.Employees.Include(E => E.Department).ToList();
+            }
             return _context.Set<T>().ToList();
         }
 
-        public T Get(int id)
+        public T? Get(int id)
         {
+            if (typeof(T) == (typeof(Employee)))
+            {
+                return (_context.Employees.Include(E => E.Department).FirstOrDefault(E => E.Id == id)) as T ;
+            }
             return _context.Set<T>().Find(id);
 
         }
