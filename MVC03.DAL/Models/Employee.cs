@@ -20,5 +20,7 @@ namespace MVC03.DAL.Models
 
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+
+       
     }
 }

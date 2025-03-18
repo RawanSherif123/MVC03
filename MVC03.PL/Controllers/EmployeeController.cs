@@ -8,13 +8,26 @@ namespace MVC03.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepo;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IDepartmentRepository _departmentRepository;
+        public EmployeeController(IEmployeeRepository employeeRepository , IDepartmentRepository departmentRepository)
         {
             _employeeRepo = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
-        public IActionResult Index()
+
+        public IActionResult Index(String? SearchInput)
         {
-            var employees = _employeeRepo.GetAll();
+           IEnumerable<Employee> employees;
+           if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepo.GetAll();
+            }
+            else
+            {
+                employees = _employeeRepo.GetAll();
+            }
+          
+             
             return View(employees);
         }
 
