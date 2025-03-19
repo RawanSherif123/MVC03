@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MVC03.BLL.Interfaces;
 using MVC03.BLL.Repositories;
 using MVC03.DAL.Data.Contexts;
+using MVC03.PL.Services;
 
 namespace MVC03.PL
 {
@@ -23,10 +24,16 @@ namespace MVC03.PL
             }); // Allow Dependency Injection for CompanyDbContext
 
 
+
+            builder.Services.AddScoped<IScopedService, ScopedService>();
+            builder.Services.AddTransient<ITransentService, TransentService>();
+            builder.Services.AddSingleton<ISingletonService, SingletonService>();
+
             //Life Time
             //builder.Services.AddScoped();
             //builder.Services.AddTransient();
             //builder.Services.AddSingleton();
+
 
 
 

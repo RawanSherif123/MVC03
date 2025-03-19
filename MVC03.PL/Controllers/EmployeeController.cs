@@ -10,11 +10,17 @@ namespace MVC03.PL.Controllers
         private readonly IEmployeeRepository _employeeRepo;
         private readonly IDepartmentRepository _departmentRepository;
 
+
         public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+
         {
             _employeeRepo = employeeRepository;
             _departmentRepository = departmentRepository;
         }
+
+
+      
+
         public IActionResult Index( string? SearchInput)
         {
             IEnumerable<Employee> employees;
@@ -31,6 +37,7 @@ namespace MVC03.PL.Controllers
             ////  ViewData["Message"] = "Hello From ViewData";
 
             //  ViewBag.Message = new { Message = "Hello From ViewBag" };
+
 
             return View(employees);
         }

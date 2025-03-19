@@ -17,6 +17,7 @@ namespace MVC03.BLL.Repositories
         public EmployeeRepository(CompanyDbContext context) : base(context)  // Ask CLR to create Obj from CompanyDbcontext
         {
             _context = context;
+
         }
 
        
@@ -24,6 +25,8 @@ namespace MVC03.BLL.Repositories
         public List<Employee> GetByName(string name)
         {
           return  _context.Employees.Include(E => E.Department).Where(E => E.Name.ToLower().Contains(name.ToLower())).ToList();
+
         }
+       
     }
 }
