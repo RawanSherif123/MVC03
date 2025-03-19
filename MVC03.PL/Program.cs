@@ -16,15 +16,26 @@ namespace MVC03.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); // Allow Dependency Injection for DepartmentRepository 
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // Allow Dependency Injection for EmployeeRepository 
+
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); // Allow Dependency Injection for CompanyDbContext
 
 
+
             builder.Services.AddScoped<IScopedService, ScopedService>();
             builder.Services.AddTransient<ITransentService, TransentService>();
             builder.Services.AddSingleton<ISingletonService, SingletonService>();
+
+            //Life Time
+            //builder.Services.AddScoped();
+            //builder.Services.AddTransient();
+            //builder.Services.AddSingleton();
+
+
+
 
             var app = builder.Build();
 

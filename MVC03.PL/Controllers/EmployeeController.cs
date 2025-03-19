@@ -9,31 +9,44 @@ namespace MVC03.PL.Controllers
     {
         private readonly IEmployeeRepository _employeeRepo;
         private readonly IDepartmentRepository _departmentRepository;
-        public EmployeeController(IEmployeeRepository employeeRepository , IDepartmentRepository departmentRepository)
+
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+
         {
             _employeeRepo = employeeRepository;
             _departmentRepository = departmentRepository;
         }
 
-        public IActionResult Index(String? SearchInput)
+
+      
+
+        public IActionResult Index( string? SearchInput)
         {
-           IEnumerable<Employee> employees;
-           if (string.IsNullOrEmpty(SearchInput))
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
             {
                 employees = _employeeRepo.GetAll();
             }
-            else
+           else
             {
-                employees = _employeeRepo.GetAll();
+                 employees = _employeeRepo.GetByName(SearchInput);
             }
-          
-             
+
+            //  // ViewData : 
+            ////  ViewData["Message"] = "Hello From ViewData";
+
+            //  ViewBag.Message = new { Message = "Hello From ViewBag" };
+
+
             return View(employees);
         }
 
         [HttpGet]
-        public IActionResult Create(int id)
+        public IActionResult Create()
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             return View();
         }
 
@@ -43,27 +56,37 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee()
+                try
                 {
-                    Name = model.Name,
-                    Salary = model.Salary,
-                    Address = model.Address,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    Age = model.Age,
+                    var employee = new Employee()
+                    {
+                        Name = model.Name,
+                        Salary = model.Salary,
+                        Address = model.Address,
+                        IsActive = model.IsActive,
+                        IsDeleted = model.IsDeleted,
+                        Age = model.Age,
 
-                    HiringDate = model.HiringDate,
-                    Phone = model.Phone,
-                    CreateAt = model.CreateAt,
-                    Email = model.Email,
+                        HiringDate = model.HiringDate,
+                        Phone = model.Phone,
+                        CreateAt = model.CreateAt,
+                        Email = model.Email,
+                        DepartmentId = model.DepartmentId,
 
-                };
-                var count = _employeeRepo.Add(employee);
-                if (count > 0)
+                    };
+                    var count = _employeeRepo.Add(employee);
+                    if (count > 0)
+                    {
+                        TempData["Message "] = " Employee is Created !!";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                catch (Exception ex)
                 {
-                    return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError(" ", ex.Message);
                 }
             }
+
 
             return View(model);
         }
@@ -84,11 +107,14 @@ namespace MVC03.PL.Controllers
         {
 
             if (id is null) return BadRequest("Invalid Id");
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             var employee = _employeeRepo.Get(id.Value);
+
             if (employee == null) return NotFound(new { statusCode = 404, messege = $"Employee With Id:{id} is Not Found" });
             var employeeDto = new EmployeeDto()
             {
-                
+
                 Name = employee.Name,
                 Salary = employee.Salary,
                 Address = employee.Address,
@@ -108,11 +134,12 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, EmployeeDto model)
+        public IActionResult Edit([FromRoute] int id, Employee model)
         {
             if (ModelState.IsValid)
             {
-                // if (id != model.Id) return BadRequest();
+                // if (id !=model.Id) return BadRequest();
+
                 var employee = new Employee()
                 {
                     Id = id,

@@ -13,5 +13,7 @@ namespace MVC03.DAL.Models
         public string Name { get; set; }
         public DateTime CreateAt { get; set; }
 
+        public List<Employee> Employees { get; set; }
+
     }
 }

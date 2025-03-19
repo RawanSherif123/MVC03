@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using MVC03.DAL.Models;
 
 namespace MVC03.PL.Dtos
 {
@@ -25,5 +26,6 @@ namespace MVC03.PL.Dtos
         [DisplayName("Hiring Date")]
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }

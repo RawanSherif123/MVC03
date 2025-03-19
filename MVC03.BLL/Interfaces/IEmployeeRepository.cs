@@ -14,5 +14,6 @@ namespace MVC03.BLL.Interfaces
           //int Add(Employee department);
           //int Update(Employee department);
           //int Delete(Employee department);*/
+        List<Employee> GetByName (string name);
     }
 }
